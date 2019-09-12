@@ -30,8 +30,8 @@ public class CollisionTest : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update () 
+	{
 		collision = false;
 
 		CollisionResult result = Intersect(Triangle.p0.transform.position, Triangle.p1.transform.position, Triangle.p2.transform.position, line);

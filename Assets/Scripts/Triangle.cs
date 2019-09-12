@@ -13,6 +13,9 @@ public class Triangle : MonoBehaviour {
 	public Transform Sibling;
 
 	private Mesh mesh;
+	Vector3 gravity = new Vector3(0, -0.005f, 0);
+
+	public bool useGravity = false;
 
 	void Start()
 	{
@@ -34,6 +37,19 @@ public class Triangle : MonoBehaviour {
 		mesh.triangles = new int[] {0, 1, 2};
 		gameObject.GetComponent<MeshRenderer>().material = material;
 
+
+		if (useGravity)
+		{
+			DoGravity(p1);
+			DoGravity(p2);
+		}
+	}
+
+	void DoGravity(Point pt)
+	{
+		var currTipPos = pt.transform.position;
+		currTipPos += gravity;
+		pt.transform.position = ((currTipPos - p0.transform.position).normalized * pt.SpringLength) + p0.transform.position;
 	}
 
 
