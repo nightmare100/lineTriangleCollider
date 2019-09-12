@@ -10,6 +10,10 @@ public class Point : MonoBehaviour {
 
 	public Point sibling;
 
+	public bool useGravity = false;
+	float gravityY = 0f;
+	public float SpringLength = 3.0f;
+
 	void OnDrawGizmos() {
 		Gizmos.color = color;
 		Gizmos.DrawCube(transform.position, new Vector3(0.25f, 0.25f, 0.25f));
@@ -22,6 +26,16 @@ public class Point : MonoBehaviour {
             Gizmos.DrawLine(transform.position - new Vector3(0, radius, 0), sibling.transform.position - new Vector3(0, sibling.radius, 0));
             Gizmos.DrawLine(transform.position + new Vector3(0, 0, radius), sibling.transform.position + new Vector3(0, 0, sibling.radius));
             Gizmos.DrawLine(transform.position - new Vector3(0, 0, radius), sibling.transform.position - new Vector3(0, 0, sibling.radius));
+		}
+	}
+
+	void Update()
+	{
+		if (useGravity)
+		{
+			var pos = transform.position;
+			pos.y -= gravityY;
+			transform.position = pos;
 		}
 	}
 

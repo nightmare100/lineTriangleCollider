@@ -52,31 +52,39 @@ public class CollisionTest : MonoBehaviour {
 	{
 		if (collRes.needFlip)
 		{
-			//需要先切平行 再推
-			// 1. 求线和面的夹角
-			Vector3 hitTriAngleVec = (collRes.hitPoint - Triangle.p0.transform.position).normalized;
-			float angle = Mathf.Acos(Vector3.Dot(line.direction, hitTriAngleVec)) * Mathf.Rad2Deg;
-
-			// collRes.hitPoint
-
-			// 2. 旋转sibling向量 到 指定角度
-			Quaternion rot = Quaternion.AngleAxis(angle, Vector3.Cross(line.direction, hitTriAngleVec));
-			Triangle.Current.position = rot * Triangle.Current.position;
-			Triangle.Sibling.position = rot * Triangle.Sibling.position;
-
-			// 3. 推动
-			Vector3 e1 = Triangle.p1.transform.position - Triangle.p0.transform.position;
-			Vector3 e2 = Triangle.p2.transform.position - Triangle.p0.transform.position;
-			Vector3 triNormal = Vector3.Cross(e1, e2);
-			Triangle.Current.position += triNormal * collRes.overDistance;
-			Triangle.Sibling.position += triNormal * collRes.overDistance;
+			// 1. 求交叉直线 2点 上下关系
+			float dotp0p1 = Vector3.Dot(line.p0.transform.position - Triangle.p0.transform.position, collRes.overNormal); 
+			float dotp1p1 = Vector3.Dot(line.p1.transform.position - Triangle.p0.transform.position, collRes.overNormal);
+			float overDis = 0;
+			if (dotp1p1 > 0 && dotp0p1 < 0)
+			{
+				//line p1 在面上方
+				overDis = Mathf.Abs(Vector3Util.DisPoint2Surface(line.p1.transform.position, Triangle.p0.transform.position, Triangle.p1.transform.position, Triangle.p2.transform.position) );
+				overDis += line.p1.radius;
+			}
+			else if (dotp0p1 > 0 && dotp1p1 < 0)
+			{
+				//line p0 在面上方 不可能出现这种情况、 腿部骨骼的跟节点和hip在一个点
+			}
+			
+			var currTip = Triangle.Current.position + collRes.overNormal * overDis;
+			var sibTip = Triangle.Sibling.position + collRes.overNormal * overDis;
+			Triangle.Current.position = ((currTip - Triangle.p0.transform.position).normalized * Triangle.p2.SpringLength) + Triangle.p0.transform.position;
+			Triangle.Sibling.position = ((sibTip - Triangle.p0.transform.position).normalized * Triangle.p1.SpringLength) + Triangle.p0.transform.position;
+			
 		}
 		else
 		{
+			var currTip = Triangle.Current.position + collRes.overNormal * collRes.overDistance;
+			var sibTip = Triangle.Sibling.position + collRes.overNormal * collRes.overDistance;
+			Triangle.Current.position = ((currTip - Triangle.p0.transform.position).normalized * Triangle.p2.SpringLength) + Triangle.p0.transform.position;
+			Triangle.Sibling.position = ((sibTip - Triangle.p0.transform.position).normalized * Triangle.p1.SpringLength) + Triangle.p0.transform.position;
+
 			//直接推
-			Triangle.Current.position += collRes.overNormal * collRes.overDistance;
-			Triangle.Sibling.position += collRes.overNormal * collRes.overDistance;
+			// Triangle.Current.position += collRes.overNormal * collRes.overDistance;
+			// Triangle.Sibling.position += collRes.overNormal * collRes.overDistance;
 		}
+		
 	}
 
 
@@ -175,8 +183,7 @@ public class CollisionTest : MonoBehaviour {
 			{
 				needFlip = true,
 				hitPoint = hittedPoint,
-				overNormal = triNormal.normalized,
-				overDistance = ray.GetRadius(hittedPoint)
+				overNormal = triNormal.normalized
 			};
 		}
 

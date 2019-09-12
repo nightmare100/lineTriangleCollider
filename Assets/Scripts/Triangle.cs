@@ -19,6 +19,10 @@ public class Triangle : MonoBehaviour {
 		gameObject.AddComponent<MeshFilter>();
 		gameObject.AddComponent<MeshRenderer>();
 		mesh = GetComponent<MeshFilter>().mesh;
+
+
+		p1.SpringLength = Vector3.Distance(p0.transform.position, p1.transform.position);
+		p2.SpringLength = Vector3.Distance(p0.transform.position, p2.transform.position);
 	}
 
 	void Update()
