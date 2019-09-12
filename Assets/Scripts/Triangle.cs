@@ -9,6 +9,9 @@ public class Triangle : MonoBehaviour {
 	public Point p2;
 	public Material material;
 
+	public Transform Current;
+	public Transform Sibling;
+
 	private Mesh mesh;
 
 	void Start()
