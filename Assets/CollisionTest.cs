@@ -125,17 +125,17 @@ public class CollisionTest : MonoBehaviour {
 		if (det > -Mathf.Epsilon && det < Mathf.Epsilon) { return null; }
 
 		//检测line是否在面的同一端
-		Vector3 triNormal = Vector3.Cross(e1, e2);
+		Vector3 triNormal = Vector3.Cross(e2, e1);
 		float dotp0p1 = Vector3.Dot(ray.p0.transform.position - p1, triNormal); 
 		float dotp1p1 = Vector3.Dot(ray.p1.transform.position - p1, triNormal);
 		if (dotp0p1 < 0 && dotp1p1 < 0 || dotp0p1 > 0 && dotp1p1 > 0)
 		{
-			//线段在面的一边(负数 默认为 腿在三角面下面)
-			float disp0 = -Vector3Util.DisPoint2Surface(ray.p0.transform.position, p1, p2, p3);
-			float disp1 = -Vector3Util.DisPoint2Surface(ray.p1.transform.position, p1, p2, p3);
+			//线段在面的一边
+			float disp0 = Vector3Util.DisPoint2Surface(ray.p0.transform.position, p1, p2, p3);
+			float disp1 = Vector3Util.DisPoint2Surface(ray.p1.transform.position, p1, p2, p3);
 			if (Mathf.Abs(disp0) < ray.p0.radius || Mathf.Abs(disp1) < ray.p1.radius)
 			{
-				float overDis = Mathf.Max(ray.p1.radius - disp1, ray.p0.radius- disp0);
+				float overDis = Mathf.Max(ray.p1.radius - disp1, ray.p0.radius - disp0);
 				return new CollisionResult()
 				{
 					needFlip = false,

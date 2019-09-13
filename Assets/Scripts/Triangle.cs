@@ -26,6 +26,13 @@ public class Triangle : MonoBehaviour {
 
 		p1.SpringLength = Vector3.Distance(p0.transform.position, p1.transform.position);
 		p2.SpringLength = Vector3.Distance(p0.transform.position, p2.transform.position);
+
+		// Vector3 normalAlways = Vector3.Cross(p2.transform.position - p0.transform.position, p1.transform.position - p0.transform.position);
+		// Vector3 normalOrigin = new Plane(p0.transform.position, p1.transform.position, p2.transform.position).normal;
+		// Debug.Log("[Check dot]" + Vector3.Dot(normalAlways, normalOrigin));
+		// Debug.Log("[Check always]" + normalAlways);
+		// Debug.Log("[Check origin]" + normalOrigin );
+
 	}
 
 	void Update()
@@ -59,6 +66,10 @@ public class Triangle : MonoBehaviour {
 		Gizmos.DrawLine(p0.transform.position, p1.transform.position);
 		Gizmos.DrawLine(p1.transform.position, p2.transform.position);
 		Gizmos.DrawLine(p2.transform.position, p0.transform.position);
+		var normal = Vector3.Cross(p2.transform.position - p0.transform.position, p1.transform.position - p0.transform.position).normalized;
+
+		Gizmos.color = Color.green;
+		Gizmos.DrawLine(p1.transform.position, p1.transform.position + normal * 3);
 	}
 
 }
