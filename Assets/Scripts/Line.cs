@@ -23,6 +23,11 @@ public class Line : MonoBehaviour {
 		
 	}
 
+	public float GetRadius(float comp)
+	{
+		return p0.radius - (p0.radius - p1.radius) * (1 - comp);
+	}
+
 	public Vector3 origin
 	{
 		get { return p0.transform.position; }
@@ -32,6 +37,7 @@ public class Line : MonoBehaviour {
 	{
 		get { return (p1.transform.position - p0.transform.position).normalized; }
 	}
+	//(l1 - l0).normalized
 
 
 
