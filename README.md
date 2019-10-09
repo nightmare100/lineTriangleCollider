@@ -24,10 +24,4 @@
 ```
 ![avatar](https://github.com/nightmare100/lineTriangleCollider/blob/feature/klab/imgs/v4.gif)
 
-### SpringBone sibling 的 添加顺序
-![avatar](https://github.com/nightmare100/lineTriangleCollider/blob/feature/klab/imgs/springbone-spt.png)
-```
-衣物腿部碰撞体设置顺序
-rightupleg -> LeftLeg -> rightleg ->leftupleg
-```
 
